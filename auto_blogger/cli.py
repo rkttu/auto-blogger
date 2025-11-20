@@ -34,8 +34,14 @@ def generate(
     author: str = typer.Option(
         "Auto-Blogger", "--author", "-a", help="Author name for YAML front matter"
     ),
+    with_images: bool = typer.Option(
+        False, "--with-images", "-i", help="Add header images from Unsplash"
+    ),
+    image_count: int = typer.Option(
+        1, "--image-count", help="Number of images to add (1-3)"
+    ),
 ):
-    """Generate a blog post with SEO-optimized front matter (keywords, abstract)."""
+    """Generate a blog post with SEO-optimized front matter (keywords, abstract, images)."""
     try:
         config = Config.load()
         
@@ -53,6 +59,12 @@ def generate(
             else:
                 console.print("[yellow]Warning: Research enabled but no MCP servers configured in .env[/yellow]")
         
+        if with_images:
+            if config.unsplash_access_key:
+                console.print(f"[dim]Images: Enabled ({image_count} image(s) from Unsplash)[/dim]")
+            else:
+                console.print("[yellow]Warning: Images enabled but Unsplash credentials not configured in .env[/yellow]")
+        
         console.print()
         
         with console.status("[bold green]Generating content..."):
@@ -63,7 +75,9 @@ def generate(
                 tone=tone,
                 length=length,
                 use_research=research,
-                author=author
+                author=author,
+                with_images=with_images,
+                image_count=image_count
             )
         
         if output:

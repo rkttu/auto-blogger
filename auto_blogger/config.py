@@ -20,6 +20,11 @@ class Config:
     mcp_servers: list[str] = None
     openai_api_base: Optional[str] = None
     
+    # Unsplash configuration
+    unsplash_application_id: Optional[str] = None
+    unsplash_access_key: Optional[str] = None
+    unsplash_secret_key: Optional[str] = None
+    
     def __post_init__(self):
         """Initialize mcp_servers if None."""
         if self.mcp_servers is None:
@@ -43,6 +48,19 @@ class Config:
         if api_base and not api_base.strip():
             api_base = None
         
+        # Get Unsplash credentials (optional)
+        unsplash_app_id = os.getenv("UNSPLASH_APPLICATION_ID", None)
+        unsplash_access = os.getenv("UNSPLASH_ACCESS_KEY", None)
+        unsplash_secret = os.getenv("UNSPLASH_SECRET_KEY", None)
+        
+        # Clean up empty strings
+        if unsplash_app_id and not unsplash_app_id.strip():
+            unsplash_app_id = None
+        if unsplash_access and not unsplash_access.strip():
+            unsplash_access = None
+        if unsplash_secret and not unsplash_secret.strip():
+            unsplash_secret = None
+        
         return cls(
             openai_api_key=os.getenv("OPENAI_API_KEY", ""),
             model=os.getenv("DEFAULT_MODEL", "gpt-4o-mini"),
@@ -52,4 +70,7 @@ class Config:
             temperature=float(os.getenv("TEMPERATURE", "0.7")),
             mcp_servers=mcp_servers,
             openai_api_base=api_base,
+            unsplash_application_id=unsplash_app_id,
+            unsplash_access_key=unsplash_access,
+            unsplash_secret_key=unsplash_secret,
         )
