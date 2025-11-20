@@ -119,10 +119,12 @@ class UnsplashClient:
         if trigger_download:
             self.trigger_download(image.download_url)
         
-        # Create markdown image with alt text
-        markdown = f"![{image.alt_description}]({image.url})\n\n"
+        # Create markdown image with proper alt text format
+        # Format: ![Photo by Photographer on Unsplash](url)
+        caption = f"Photo by {image.photographer_name} on Unsplash"
+        markdown = f"![{caption}]({image.url})\n\n"
         
-        # Add attribution as required by Unsplash guidelines
+        # Add attribution link as required by Unsplash guidelines
         markdown += f"*Photo by [{image.photographer_name}]({image.photographer_url}) on [Unsplash]({image.unsplash_url})*\n"
         
         return markdown
