@@ -31,14 +31,11 @@ def generate(
     research: bool = typer.Option(
         False, "--research", "-r", help="Gather reference materials from MCP servers"
     ),
-    use_front_matter: bool = typer.Option(
-        False, "--use-front-matter", help="Add YAML front matter with metadata (date, author)"
-    ),
     author: str = typer.Option(
-        "Auto-Blogger", "--author", "-a", help="Author name for front matter"
+        "Auto-Blogger", "--author", "-a", help="Author name for YAML front matter"
     ),
 ):
-    """Generate a blog post on the given topic."""
+    """Generate a blog post with SEO-optimized front matter (keywords, abstract)."""
     try:
         config = Config.load()
         
@@ -48,15 +45,13 @@ def generate(
         
         console.print(Panel(f"[bold blue]Generating blog post about:[/bold blue] {topic}", expand=False))
         console.print(f"[dim]Language: {language} | Tone: {tone} | Length: {length}[/dim]")
+        console.print(f"[dim]SEO: Auto-generating keywords and abstract | Author: {author}[/dim]")
         
         if research:
             if config.mcp_servers:
                 console.print(f"[dim]Research: Enabled ({len(config.mcp_servers)} MCP server(s))[/dim]")
             else:
                 console.print("[yellow]Warning: Research enabled but no MCP servers configured in .env[/yellow]")
-        
-        if use_front_matter:
-            console.print(f"[dim]Front Matter: Enabled (Author: {author})[/dim]")
         
         console.print()
         
@@ -68,7 +63,6 @@ def generate(
                 tone=tone,
                 length=length,
                 use_research=research,
-                use_front_matter=use_front_matter,
                 author=author
             )
         
