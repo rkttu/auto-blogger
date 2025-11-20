@@ -44,15 +44,14 @@ class BlogGenerator:
         length: str = "medium",
         use_research: bool = False,
         author: str = "Auto-Blogger",
-        with_images: bool = False,
         image_count: int = 1
     ) -> str:
         """Generate a blog post on the given topic with SEO-optimized front matter.
         
-        This uses a two-phase approach:
+        This uses a three-phase approach:
         Phase 1: Generate main content
         Phase 2: Analyze content and generate front matter (title, keywords, abstract)
-        Phase 3 (optional): Add header images from Unsplash
+        Phase 3: Add header images from Unsplash (if image_count > 0 and configured)
         
         Args:
             topic: Blog post topic
@@ -61,8 +60,7 @@ class BlogGenerator:
             length: Content length (short, medium, long)
             use_research: Whether to use MCP research
             author: Author name
-            with_images: Whether to add Unsplash images
-            image_count: Number of images to add (1-3)
+            image_count: Number of images to add (0 to disable, 1-3 recommended)
         """
         
         length_guideline = self.LENGTH_GUIDELINES.get(length, self.LENGTH_GUIDELINES["medium"])
@@ -158,8 +156,8 @@ Please write a complete blog post in {language} that:
         # Phase 2: Generate SEO-optimized front matter with keywords and abstract
         result = self._add_front_matter_with_metadata(content, topic, author, language)
         
-        # Phase 3: Add header images from Unsplash (if enabled and configured)
-        if with_images and self._is_unsplash_configured():
+        # Phase 3: Add header images from Unsplash (if requested and configured)
+        if image_count > 0 and self._is_unsplash_configured():
             result = self._add_header_images(result, topic, image_count)
         
         return result
