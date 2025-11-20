@@ -93,6 +93,8 @@ IMPORTANT FORMATTING RULES:
 - Avoid trailing spaces at end of lines
 - Use proper link and image syntax
 - Ensure proper table formatting with aligned columns
+- CRITICAL: In markdown tables, escape pipe characters (|) with backslash (\\|) when they appear in cell content
+  Example: "Choice A \\| Choice B" not "Choice A | Choice B"
 
 CONTENT STRUCTURE:
 - AI attribution notice in blockquote format at the very beginning
